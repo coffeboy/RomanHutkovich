@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.cleaners;
+package by.epam.task01.entity.cleaner;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.WashingMachineBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий стиральную машину.
@@ -32,69 +33,14 @@ public class WashingMachine extends Device {
 	/** Скорость отжима */
 	private final int DRYING_SPEED;
 	
-	public static class WashingMachineBuilder extends Builder {
-		private boolean hasDryer;
-		private float maxLoad;
-		private boolean hasDirectDrive;
-		private boolean canOpenHatch180;
-		private int dryingSpeed;
-		
-		public WashingMachineBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf, pow, mas, exOr);
-		}
-		
-		public WashingMachineBuilder hasDryer(boolean val) {
-			this.hasDryer = val;
-			return this;
-		}
-		
-		public WashingMachineBuilder maxLoad(float val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Max. load cannot be negative or equal zero!");
-				}
-				this.maxLoad = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("WashingMachine exception: "+iae);
-			}		
-			return this;
-		}
-		
-		public WashingMachineBuilder hasDirectDrive(boolean val) {
-			this.hasDirectDrive = val;
-			return this;
-		}
-		
-		public WashingMachineBuilder canOpenHatch180(boolean val) {
-			this.canOpenHatch180 = val;
-			return this;
-		}
-		
-		public WashingMachineBuilder dryingSpeed(int val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Drying speed cannot be negative!");
-				}
-				this.dryingSpeed = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("WashingMachine exception: "+iae);
-			}	
-			return this;
-		}
-		
-		public WashingMachine build() {
-			return new WashingMachine(this);
-		}		
-	}
-	
 	public WashingMachine(WashingMachineBuilder builder) {
 		super(builder);
 		
-		HAS_DRYER = builder.hasDryer;
-		MAX_LOAD = builder.maxLoad;
-		HAS_DIRECT_DRIVE = builder.hasDirectDrive;
-		CAN_OPEN_HATCH_180 = builder.canOpenHatch180;
-		DRYING_SPEED = builder.dryingSpeed;
+		HAS_DRYER = builder.isHasDryer();
+		MAX_LOAD = builder.getMaxLoad();
+		HAS_DIRECT_DRIVE = builder.isHasDirectDrive();
+		CAN_OPEN_HATCH_180 = builder.isCanOpenHatch180();
+		DRYING_SPEED = builder.getDryingSpeed();
 		LOG.info("WashingMachine building complete!");
 	}
 	

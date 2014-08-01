@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.multimedia;
+package by.epam.task01.entity.multimedia;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.DVDBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий DVD-плеер.
@@ -26,41 +27,12 @@ public class DVD extends Device{
 	/** Флажок наличия интерфейсов для подключения к сети Интернет */
 	private final boolean HAS_INTERNET_CONNECTION;
 	
-	public static class DVDBuilder extends Builder{
-		private boolean supBluray;
-		private boolean childrenProtection;
-		private boolean hasInternetConnection;
-		
-		public DVDBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf,pow, mas, exOr);
-		}
-		
-		public DVDBuilder supBluray(boolean val) {
-			this.supBluray = val;
-			return this;
-		}
-		
-		public DVDBuilder childrenProtection(boolean val) {
-			this.childrenProtection = val;
-			return this;
-		}
-		
-		public DVDBuilder hasInternetConnection(boolean val) {
-			this.hasInternetConnection = val;
-			return this;
-		}
-		
-		public DVD build(){
-			return new DVD(this);
-		}
-	}
-	
 	public DVD(DVDBuilder builder) {
 		super(builder);
 		
-		SUP_BLURAY = builder.supBluray;
-		CHILDREN_PROTECTION = builder.childrenProtection;
-		HAS_INTERNET_CONNECTION = builder.hasInternetConnection;
+		SUP_BLURAY = builder.isSupBluray();
+		CHILDREN_PROTECTION = builder.isChildrenProtection();
+		HAS_INTERNET_CONNECTION = builder.isHasInternetConnection();
 		LOG.info("DVD building complete!");
 	}
 	

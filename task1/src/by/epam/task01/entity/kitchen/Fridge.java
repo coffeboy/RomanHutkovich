@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.kitchen;
+package by.epam.task01.entity.kitchen;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.FridgeBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий холодильник.
@@ -26,55 +27,12 @@ public class Fridge extends Device {
 	/** Средняя температура хранения */
 	private final int STORAGE_TEMP;
 	
-	public static class FridgeBuilder extends Builder {
-		private int compressors;
-		private int volume;
-		private int storageTemp;
-		
-		public FridgeBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf,pow, mas, exOr);		
-		}
-		
-		public FridgeBuilder compressors(int val){
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Fridge compressors count can't be negative or equal zero!");
-				}
-				this.compressors = val;
-			} catch(IllegalArgumentException e) {
-				LOG.error("FridgeBuilder exception: " + e);
-			}
-			return this;
-		}
-		
-		public FridgeBuilder volume(int val){
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Fridge volume can't be negative or equal zero!");
-				}
-				this.volume = val;
-			} catch(IllegalArgumentException e) {
-				LOG.error("FridgeBuilder exception: " + e);
-			}
-			return this;
-		}
-		
-		public FridgeBuilder storageTemp(int val){
-			this.storageTemp = val;
-			return this;
-		}	
-		
-		public Fridge build(){
-			return new Fridge(this);
-		}
-	}
-	
 	public Fridge(FridgeBuilder builder) {
 		super(builder);
 		
-		COMPRESSORS = builder.compressors;
-		VOLUME = builder.volume;
-		STORAGE_TEMP = builder.storageTemp;
+		COMPRESSORS = builder.getCompressors();
+		VOLUME = builder.getVolume();
+		STORAGE_TEMP = builder.getStorageTemp();
 		LOG.info("Fridge building complete!");
 	}
 	

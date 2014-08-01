@@ -5,7 +5,7 @@ package by.epam.task01.logic;
 
 import java.util.Comparator;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, реализующий интерфейс Comparator<T>.

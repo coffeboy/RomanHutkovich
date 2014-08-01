@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.multimedia;
+package by.epam.task01.entity.multimedia;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.TVBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий телевизор.
@@ -32,79 +33,14 @@ public class TV extends Device{
 	/** Разрешение экрана */
 	private final String RESOLUTION;
 	
-	public static class TVBuilder extends Builder{
-		private boolean colorful;
-		private float diagonal;
-		private boolean slim;
-		private int dpi;
-		private String resolution;
-		
-		public TVBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf,pow, mas, exOr);
-		}
-		
-		public TVBuilder colorful(boolean val) {
-			this.colorful = val;
-			return this;
-		}
-		
-		public TVBuilder diagonal(float val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Diagonal cannot be negative or equal zero!");
-				}
-				this.diagonal = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("TV exception: "+iae);
-			}
-			
-			return this;
-		}
-		
-		public TVBuilder slim(boolean val) {
-			this.slim = val;
-			return this;
-		}
-		
-		public TVBuilder dpi(int val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("DPI cannot be negative or equal zero!");
-				}
-				this.dpi = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("TV exception: "+iae);
-			}
-			
-			return this;
-		}
-		
-		public TVBuilder resolution(String val) {
-			try {
-				if (val.length() > 0 && val.contains("x")) {
-					this.resolution = val;
-				} else {
-					throw new IllegalArgumentException("Wrong resolution type!");
-				}
-			} catch (IllegalArgumentException iae) {
-				LOG.error("TV exception: "+iae);
-			}
-			return this;
-		}
-		
-		public TV build(){
-			return new TV(this);
-		}
-	}
-	
 	public TV(TVBuilder builder) {
 		super(builder);
 		
-		COLORFUL = builder.colorful;
-		DIAGONAL = builder.diagonal;
-		SLIM = builder.slim;
-		DPI = builder.dpi;
-		RESOLUTION = builder.resolution;
+		COLORFUL = builder.isColorful();
+		DIAGONAL = builder.getDiagonal();
+		SLIM = builder.isSlim();
+		DPI = builder.getDpi();
+		RESOLUTION = builder.getResolution();
 		LOG.info("TV building complete!");
 	}
 	

@@ -2,10 +2,9 @@
  * Роман Гуткович
  */
 
-package by.epam.task01.mainpkg;
+package by.epam.task01.entity;
 
-import org.apache.log4j.*;
-
+import by.epam.task01.creator.Builder;
 /**
  * Базовый класс для всех электроприборов.
  * Используется паттерн Builder.
@@ -14,9 +13,7 @@ import org.apache.log4j.*;
  * @author Роман Гуткович
  */
 
-public class Device {
-	private static final Logger LOG = Logger.getLogger(Device.class);
-	
+public abstract class Device {
 	/** Производитель */
 	private final String MANUFACTURER;
 	
@@ -32,43 +29,13 @@ public class Device {
 	/** Состояние (выкл/вкл) */
 	private boolean stateOn;
 	
-	public static class Builder {		
-		private final int power;
-		private final int mass;
-		private final String standart;
-		private final String manufacturer;
-		
-		public Builder(String manuf,int pow,int mas,String stndrt) {
-			LOG.info("Device builder...");
-			try {
-				if (manuf.length() == 0) {
-					throw new IllegalArgumentException("Empty manufacturer name!");
-				}
-				
-				if ( (pow <= 0) || (mas <= 0) ) {
-					throw new IllegalArgumentException("Negative power or mass!");
-				}
-			} catch(IllegalArgumentException iae) {
-				LOG.error("Illegal builder arguments: "+iae);
-			}
-			
-			power = pow;
-			mass = mas;
-			standart = stndrt;			
-			manufacturer = manuf;
-			LOG.info("Building complete!");
-		}
-		
-		public Device build() {
-			return new Device(this);
-		}
-	}
+
 	
 	public Device(Builder builder) {
-		POWER = builder.power;
-		MASS = builder.mass;
-		STANDART = builder.standart;
-		MANUFACTURER = builder.manufacturer;
+		POWER = builder.getPower();
+		MASS = builder.getMass();
+		STANDART = builder.getStandart();
+		MANUFACTURER = builder.getManufacturer();
 	}
 	
 	public String getManufacturer() {
@@ -103,6 +70,7 @@ public class Device {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
+		sb.append(this.getClass()).append("@").append(this.hashCode()).append("\n");
 		sb.append("Manufacturer: ").append(getManufacturer()).append("\n");
 		sb.append("Power: ").append(getPower()).append("\n");
 		sb.append("Mass: ").append(getMass()).append("\n");

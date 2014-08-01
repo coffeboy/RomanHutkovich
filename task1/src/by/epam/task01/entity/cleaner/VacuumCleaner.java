@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.cleaners;
+package by.epam.task01.entity.cleaner;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.VacuumCleanerBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий пылесос.
@@ -29,56 +30,13 @@ public class VacuumCleaner extends Device {
 	/** Уровень шума */
 	private final int LOUDNESS;
 	
-	/** Построитель пылесоса */
-	public static class VacuumCleanerBuilder extends Builder {
-		private boolean withWater;
-		private boolean hasHSPAFilter;
-		private boolean telescopicTube;
-		private int loudness;
-		
-		public VacuumCleanerBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf, pow, mas, exOr);
-		}
-		
-		public VacuumCleanerBuilder withWater(boolean val) {
-			this.withWater = val;
-			return this;
-		}
-		
-		public VacuumCleanerBuilder hasHSPAFilter(boolean val) {
-			this.hasHSPAFilter = val;
-			return this;
-		} 
-		
-		public VacuumCleanerBuilder telescopicTube(boolean val) {
-			this.telescopicTube = val;
-			return this;
-		}
-		
-		public VacuumCleanerBuilder loudness(int val) {
-			try {
-				if (val < 0) {
-					throw new IllegalArgumentException("Loudness cannot be negative!");
-				}
-				this.loudness = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("VacuumCleaner exception: "+iae);
-			}		
-			return this;
-		} 
-		
-		public VacuumCleaner build() {
-			return new VacuumCleaner(this);
-		}
-	}
-	
 	public VacuumCleaner(VacuumCleanerBuilder builder) {
 		super(builder);
 		
-		WITH_WATER = builder.withWater;
-		HAS_HSPA_FILTER = builder.hasHSPAFilter;
-		TELESCOPIC_TUBE = builder.telescopicTube;
-		LOUDNESS = builder.loudness;
+		WITH_WATER = builder.isWithWater();
+		HAS_HSPA_FILTER = builder.isHasHSPAFilter();
+		TELESCOPIC_TUBE = builder.isTelescopicTube();
+		LOUDNESS = builder.getLoudness();
 		LOG.info("VacuumCleaner building complete!");
 	}
 	

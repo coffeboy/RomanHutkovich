@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.cleaners;
+package by.epam.task01.entity.cleaner;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.SteamPurifierBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий пароочиститель.
@@ -25,64 +26,13 @@ public class SteamPurifier extends Device {
 	
 	/** Объем котла */
 	private final float BOIL_VOLUME;
-	
-	/** Вложенный класс построителя */
-	public static class SteamPurifierBuilder extends Builder {
-		private float maxPressure;
-		private int heatTime;
-		private float boilVolume;
 		
-		public SteamPurifierBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf, pow, mas, exOr);
-		}
-		
-		public SteamPurifierBuilder maxPressure(float val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Max. pressure cannot be negative or equal zero!");
-				}
-				this.maxPressure = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("SteamPurifier exception: "+iae);
-			}			
-			return this;
-		}
-		
-		public SteamPurifierBuilder heatTime(int val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Heat time cannot be negative or equal zero!");
-				}
-				this.heatTime = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("SteamPurifier exception: "+iae);
-			}			
-			return this;
-		}
-		
-		public SteamPurifierBuilder boilVolume(float val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Boil volume cannot be negative or equal zero!");
-				}
-				this.boilVolume = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("SteamPurifier exception: "+iae);
-			}			
-			return this;
-		}
-		
-		public SteamPurifier build() {
-			return new SteamPurifier(this);
-		}		
-	}
-	
 	public SteamPurifier(SteamPurifierBuilder builder) {
 		super(builder);
 		
-		MAX_PRESSURE = builder.maxPressure;
-		HEAT_TIME = builder.heatTime;
-		BOIL_VOLUME = builder.boilVolume;
+		MAX_PRESSURE = builder.getMaxPressure();
+		HEAT_TIME = builder.getHeatTime();
+		BOIL_VOLUME = builder.getBoilVolume();
 		LOG.info("SteamPurifier building complete!");
 	}
 	

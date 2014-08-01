@@ -1,11 +1,12 @@
 /*
  * Роман Гуткович
  */
-package by.epam.task01.kitchen;
+package by.epam.task01.entity.kitchen;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.mainpkg.Device;
+import by.epam.task01.creator.ElectricRangeBuilder;
+import by.epam.task01.entity.Device;
 
 /**
  * Класс, описывающий электроплиту.
@@ -26,62 +27,12 @@ public class ElectricRange extends Device {
 	/** Количество делений перелючателя */
 	private final int DIVISIONS_COUNT;
 	
-	public static class ElectricRangeBuilder extends Builder {
-		private int maxTemperature;
-		private int panCount;
-		private int divisionsCount;
-		
-		public ElectricRangeBuilder(String manuf,int pow,int mas,String exOr) {
-			super(manuf,pow, mas, exOr);		
-		}
-		
-		public ElectricRangeBuilder maxTemperature(int val) {
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Max. temperature cannot be negative or equal zero!");
-				}
-				this.maxTemperature = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("ElectricRangeBuilder exception: " + iae);
-			}			
-			return this;
-		}
-		
-		public ElectricRangeBuilder panCount(int val){
-			try {
-				if (val <= 0) {
-					throw new IllegalArgumentException("Pans count cannot be negative or equal zero!");
-				}
-				this.panCount = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("ElectricRangeBuilder exception: " + iae);
-			}			
-			return this;
-		}
-		
-		public ElectricRangeBuilder divisionsCount(int val){
-			try {
-				if (val < 0) {
-					throw new IllegalArgumentException("Cutout divisions count cannot be negative!");
-				}
-				this.divisionsCount = val;
-			} catch (IllegalArgumentException iae) {
-				LOG.error("ElectricRangeBuilder exception: " + iae);
-			}			
-			return this;
-		}
-		
-		public ElectricRange build(){
-			return new ElectricRange(this);
-		}
-	}
-
 	public ElectricRange(ElectricRangeBuilder builder) {
 		super(builder);
 		
-		MAX_TEMPERATURE = builder.maxTemperature;
-		PAN_COUNT = builder.panCount;
-		DIVISIONS_COUNT = builder.divisionsCount;
+		MAX_TEMPERATURE = builder.getMaxTemperature();
+		PAN_COUNT = builder.getPanCount();
+		DIVISIONS_COUNT = builder.getDivisionsCount();
 		LOG.info("ElectricRange building complete!");
 	}
 	

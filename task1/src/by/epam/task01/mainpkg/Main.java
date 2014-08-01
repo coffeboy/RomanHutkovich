@@ -3,7 +3,9 @@
  */
 package by.epam.task01.mainpkg;
 
-import by.epam.task01.kitchen.Fridge;
+import org.apache.log4j.Logger;
+
+import by.epam.task01.entity.Device;
 import by.epam.task01.logic.*;
 
 /**
@@ -13,18 +15,33 @@ import by.epam.task01.logic.*;
  * @author Роман Гуткович
  */
 public class Main {
+	public static final Logger LOG = Logger.getLogger(Main.class);
+	
 	public static void main(String[] args) {
-		DeviceProcessor dk = new DeviceProcessor();
-		dk.takeDevices();
+		DeviceManager dk = new DeviceManager();
 		
-		System.out.println("Consumable power: " + dk.consumablePower());
+		try {
+			dk.takeDevices();
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+		
+		LOG.info("Consumable power: " + dk.consumablePower());
 		dk.turnOnDevice(0);
 		dk.turnOnDevice(3);
-		System.out.println("Consumable power: " + dk.consumablePower());
+		LOG.info("Consumable power: " + dk.consumablePower());
 		
-		System.out.println(dk.find(new Fridge.FridgeBuilder("ATLANT", 1800, 80, "ГОСТ 2331.16-88").
-				compressors(1).storageTemp(5).volume(100).build()));
-
-		dk.printAll();
+		LOG.info("Unsorted devices: ");
+		for (Device dev: dk.getAll()) {
+			LOG.info(dev);
+		}
+		
+		dk.sortDevices();
+		LOG.info("Sorted devices: ");
+		for (Device dev: dk.getAll()) {
+			LOG.info(dev);
+		}
+		
+		
 	}
 }

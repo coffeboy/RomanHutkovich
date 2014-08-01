@@ -9,39 +9,51 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import by.epam.task01.kitchen.*;
-import by.epam.task01.cleaners.*;
-import by.epam.task01.multimedia.*;
-import by.epam.task01.mainpkg.*;
+import by.epam.task01.creator.*;
+import by.epam.task01.entity.*;
+
 /**
  * Класс-манипулятор устройствами.
  * 
  * @version 1.0 28 Июл 2014
  * @author Роман Гуткович
  */
-public class DeviceProcessor {
-	private static final Logger LOG = Logger.getLogger(DeviceProcessor.class);
+public class DeviceManager {
+	private static final Logger LOG = Logger.getLogger(DeviceManager.class);
 	private DeviceComparator compr = new DeviceComparator();
 	
 	/** Список электроприборов в квартире */
 	private List<Device> devices = new ArrayList<Device>();
 	
-	/** Заглушка на формирования списка электроприборов */
-	public void takeDevices() {
-		addDevice(new Fridge.FridgeBuilder("ATLANT", 1800, 80, "ГОСТ 2331.16-88").compressors(1).
-				storageTemp(5).volume(100).build());
+	/** Заглушка на формирование списка электроприборов */
+	public void takeDevices() throws Exception {
+		DishWasherBuilder dwb = new DishWasherBuilder("GEFEST", 1600, 18, "ISO 2412.14-98");
+		dwb.setLoudness(24);
+		dwb.setVolume(77);
+		dwb.setWashCycleTime(18);
+		dwb.setWaterIntake(23);
+		setDevice(dwb.build());
 		
-		addDevice(new DishWasher.DishWasherBuilder("BOSCH", 300, 26, "ISO 2412-05").loudness(23).
-				volume(75).washCycleTime(18).waterIntake(33).build());
+		FridgeBuilder fb = new FridgeBuilder("ATLANT", 2000, 55, "ISO/MEC 1971.09-01");
+		fb.setCompressors(1);
+		fb.setStorageTemp(-2);
+		fb.setVolume(120);
+		setDevice(fb.build());
 		
-		addDevice(new VacuumCleaner.VacuumCleanerBuilder("Panasonic", 1600, 3, "ISO 1999.14-99").
-				withWater(false).hasHSPAFilter(true).loudness(39).telescopicTube(true).build());
+		SteamPurifierBuilder spb = new SteamPurifierBuilder("FIRST Austria", 500, 1, "ГОСТ 1241.24-06");
+		spb.setBoilVolume(1);
+		spb.setHeatTime(5);
+		spb.setMaxPressure(6);
+		setDevice(spb.build());
 		
-		addDevice(new DVD.DVDBuilder("SAMSUNG", 5, 2, "ISO 4490-05").supBluray(true).
-				hasInternetConnection(true).childrenProtection(true).build());
+		DVDBuilder dvdb = new DVDBuilder("SAMSUNG", 15, 1, "ISO/MEC 2219.03-99");
+		dvdb.setChildrenProtection(true);
+		dvdb.setSupBluray(false);
+		dvdb.setHasInternetConnection(false);
+		setDevice(dvdb.build());
 	}
 	
-	public void addDevice(Device dev){
+	public void setDevice(Device dev){
 		devices.add(dev);
 	}
 	
@@ -83,8 +95,8 @@ public class DeviceProcessor {
 		Collections.sort(devices, compr);
 	}
 	
-	public List<Device> getDevices() {
-		return devices;
+	public List<Device> getAll() {
+		return Collections.unmodifiableList(devices);
 	}
 	
 	/** Включить устройства в розетку */
@@ -123,13 +135,4 @@ public class DeviceProcessor {
 			dev.hookDown();
 		}		
 	}
-	
-	/** Вывести в консоль все устройства в квартире */
-	public void printAll() {
-		for (Device dev : devices) {
-			System.out.println("+---------------------------------+");
-			System.out.println(dev);
-			System.out.println("+---------------------------------+");
-		}
-	}	
 }
